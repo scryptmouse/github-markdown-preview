@@ -12,9 +12,13 @@ app = connect();
 var helpers = {};
 app.settings = {};
 app.settings.port = process.env.PORT || 8080;
+app.settings.node_env = process.env.NODE_ENV || 'development';
 
 app.use(connect.favicon());
-app.use(connect.logger('dev'));
+if (app.settings.node_env === 'production')
+  app.use(connect.logger('default'));
+else
+  app.use(connect.logger('dev'));
 app.use(connect.static(__dirname + '/public'));
 app.use(require('connect-assets')({helperContext: helpers}));
 
