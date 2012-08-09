@@ -1,0 +1,117 @@
+@import "github-markdown";
+@import "github-highlightjs";
+@import "select2";
+
+body {
+  padding-top: 0;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.container {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  &> header {
+    position: relative;
+    width: 100%;
+    h1 {
+      max-width: 50%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &> section {
+    position: relative;
+    display: inline-block;
+    float: left;
+    clear: none;
+    margin: 0;
+    padding: 0 21px;
+    width: 50%;
+  }
+}
+
+#documentTitle {
+  position: relative;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.5, white));
+  background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -moz-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -o-linear-gradient(bottom, #eeeeee 0%, #ffffff 50%);
+  background-image: -ms-linear-gradient(top, #eeeeee 0%, #ffffff 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#eeeeee', endColorstr = '#ffffff', GradientType = 0);
+  background-image: linear-gradient(top, #eeeeee 0%, #ffffff 50%);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #aaa;
+  display: block;
+  padding: 0 0 0 8px;
+  color: #444;
+  height: 26px;
+  line-height: 26px;
+  text-decoration: none;
+  //width: 48%;
+  //margin-left: 1%;
+  //margin-right: 1%;
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+}
+
+#documentTitle, .select2-container {
+  float: left;
+  clear: none;
+  width: 48%;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+#text-input {
+  margin-top: 7px;
+  width: 100%;
+  max-width: 100%;
+  font-family: Courier, monospace;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.buttons {
+  position: relative;
+  float: left;
+  clear: none;
+}
+
+.dates {
+  position: relative;
+  float: right;
+
+  time {
+    float: left;
+    clear: none;
+    margin: 0 7px;
+    &.created {
+      &:before {
+        content: 'Created: ';
+      }
+    }
+
+    &.updated {
+      &:before {
+        content: 'Updated: ';
+      }
+    }
+  }
+}

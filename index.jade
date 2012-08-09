@@ -1,0 +1,36 @@
+!!! 5
+html(lang="en")
+  head
+    title Github-Flavored Markdown Preview
+    != css('application')
+  body
+    .container#docView
+      header
+        h1 Github-Flavored Markdown Preview
+      section#preview
+        input#documentTitle(type="text", name="doctitle", placeholder='Title')
+        input#documentSelector(name="documents", type="hidden", style="width: 48%;")
+        textarea#text-input(rows="16")
+        .buttons
+          button#getPreview(type="button") Send
+          button#save(type="button") Save
+          button#destroy(type="button") Destroy
+        .dates
+          time.created
+          time.updated
+      section#parsed
+        h2 Preview will appear here.
+        ul
+          li All the normal markdown syntax is supported.
+          li Along with the very nice additions by Github
+        pre
+          code.language-javascript
+            | (function() {
+            |   console.log('Syntax highlighting also available');
+            | }).call(this);
+      footer
+        aside
+          ©2012 Alexa Grey. MIT license.
+    script(src="/nowjs/now.js")
+    != js('application')
+
