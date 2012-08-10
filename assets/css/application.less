@@ -128,3 +128,54 @@ footer {
     text-align: center;
   }
 }
+
+@media only screen and (max-width: 767px) {
+  body {
+    padding-bottom: 0;
+  }
+
+  .container > header {
+    h1 {
+      max-width: 75%;
+      width: 75%;
+      margin: 0 auto;
+      font-size: 21px;
+    }
+
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 7px;
+  }
+
+  .container > section {
+    width: 100%;
+    float: none;
+    clear: both;
+    margin-bottom: 7px;
+  }
+
+  #parsed {
+    outline: 1px outset #cccccc;
+  }
+
+  .buttons, .dates {
+    width: 100%;
+    float: none;
+    clear: both;
+    margin: 7px auto;
+    text-align: center;
+  }
+
+  .dates time {
+    display: block;
+    float: none;
+    clear: both;
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  footer {
+    position: static;
+    width: 100%;
+  }
+
+}
