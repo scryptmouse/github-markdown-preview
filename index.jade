@@ -1,6 +1,11 @@
 !!! 5
 html(lang="en")
   head
+    meta(charset='utf8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    meta(name='author', content='Alexa Grey')
+    meta(name='description', content='An in-browser previewer for Github-flavored markdown syntax')
     title Github-Flavored Markdown Preview
     != css('application')
   body
@@ -30,7 +35,7 @@ html(lang="en")
             | }).call(this);
     footer
       aside
-        | Stiched together by 
+        | Stiched together by
         a(href="http://alexa.is", title="alexa.is") Alexa Grey
         |. Released under MIT license.
     script(src="/nowjs/now.js")
