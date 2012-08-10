@@ -129,6 +129,23 @@ footer {
   }
 }
 
+@media only screen and (max-width: 1050px) {
+  .buttons, .dates {
+    width: 100%;
+    float: none;
+    clear: both;
+    margin: 7px auto;
+    text-align: center;
+  }
+
+  .dates time {
+    float: none;
+    clear: both;
+    text-align: center;
+  }
+
+}
+
 @media only screen and (max-width: 767px) {
   body {
     padding-bottom: 0;
@@ -153,24 +170,13 @@ footer {
     margin-bottom: 7px;
   }
 
-  #parsed {
-    outline: 1px outset #cccccc;
-  }
-
-  .buttons, .dates {
-    width: 100%;
-    float: none;
-    clear: both;
-    margin: 7px auto;
-    text-align: center;
-  }
-
   .dates time {
     display: block;
-    float: none;
-    clear: both;
     width: 80%;
-    margin: 0 auto;
+  }
+
+  #parsed {
+    outline: 1px outset #cccccc;
   }
 
   footer {
