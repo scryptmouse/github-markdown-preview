@@ -2,14 +2,17 @@
 @import "github-highlightjs";
 @import "select2";
 
-body {
-  padding-top: 0;
-}
+@footerHeight: 45px;
 
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+body {
+  padding-top: 0;
+  padding-bottom: @footerHeight;
 }
 
 .container {
@@ -64,9 +67,6 @@ body {
   height: 26px;
   line-height: 26px;
   text-decoration: none;
-  //width: 48%;
-  //margin-left: 1%;
-  //margin-right: 1%;
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
 }
@@ -113,5 +113,18 @@ body {
         content: 'Updated: ';
       }
     }
+  }
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: @footerHeight;
+  width: 50%;
+  aside {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
   }
 }
