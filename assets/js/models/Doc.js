@@ -1,9 +1,5 @@
 (function() {
 
-  function generateDefaultTitle() {
-    return moment().format('[Untitled -] LLL');
-  }
-
   var Doc = Backbone.Model.extend({
     defaults: function() {
       return {
