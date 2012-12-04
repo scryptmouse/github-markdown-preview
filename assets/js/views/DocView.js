@@ -5,13 +5,12 @@
   'use strict';
 
   var DocView = Backbone.View.extend({
-    el: $('#docView'),
-
     events: {
       'keydown #text-input': 'tabHandler',
       'click #getPreview': 'sendMarkdown',
       'click #save': 'saveDocument',
-      'click #destroy': 'destroyDocument'
+      'click #destroy': 'destroyDocument',
+      'change #documentSelector': 'showDocument'
     },
 
     initialize: function() {
@@ -31,11 +30,11 @@
         },
         data: {results: Docs.models, text: function(doc) { return doc.get('title'); }},
         query: Docs.select2Query.bind(Docs)
-      }).on('change', this.showDocument);
+      });
 
       this.$el.on('keyup', '#text-input', _(this.saveDocument).debounce(1000));
 
-      window.dispatch.on('document:reset', (function() {
+      window.dispatch.on('document:reset', _(function() {
         this.resetDocument();
       }).bind(this));
 
@@ -160,6 +159,6 @@
     }
   });
 
-  window.App = new DocView();
+  window.DocView = DocView;
 
 }).call(this);

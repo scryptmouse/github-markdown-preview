@@ -1,5 +1,5 @@
-/*jshint jquery:true */
-/*globals now,Docs,window,moment */
+/*jshint jquery:true, browser:true */
+/*globals now,Docs,DocView,moment */
 //= require ./lib/jquery.min
 //= require ./lib/moment.min
 //= require ./lib/underscore
@@ -39,6 +39,7 @@ $(document).ready(function() {
 
   $('.dates').hide();
 
+  window.App = new DocView({el: $('#docView')});
   now.getParsed = window.App.showParsed.bind(window.App);
 
   window.dispatch.on('sendMarkdown', function() {
