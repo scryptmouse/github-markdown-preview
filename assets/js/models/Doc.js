@@ -5,23 +5,18 @@
   }
 
   var Doc = Backbone.Model.extend({
-    defaults: {
-      category: null,
-      content: '',
-      title: null,
-      created: null,
-      updated: null
+    defaults: function() {
+      return {
+        category: null,
+        content: '',
+        title: moment().format('[Untitled -] LLL'),
+        created: Date.now(),
+        updated: Date.now()
+      };
     },
 
     initialize: function() {
-      if (!this.get('created'))
-        this.set({created: Date.now()});
-      if (!this.get('updated'))
-        this.set({updated: Date.now()});
-      if (!this.get('title'))
-        this.set({title: generateDefaultTitle()});
-
-      this.on('change:title change:content', function(doc, other) {
+      this.on('change:title change:content', function(doc) {
         doc.set({updated: Date.now()});
       });
     },
