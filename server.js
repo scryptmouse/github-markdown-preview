@@ -36,7 +36,15 @@ server.listen(app.settings.port, '127.0.0.1', function(err) {
   console.log('Server is now listening on http://127.0.0.1:%d', app.settings.port);
 });
 
-everyone = nowjs.initialize(server);
+// Don't bother using websockets in production,
+// because nginx doesn't support them yet.
+if (process.env.NODE_ENV === 'production') {
+  everyone = nowjs.initialize(server,
+    {socketio:
+      {transports: ['xhr-polling', 'htmlfile', 'jsonp-polling']}});
+} else {
+  everyone = nowjs.initialize(server);
+}
 
 everyone.now.sendMarkdown = function(markdown) {
   this.now.getParsed(parser.parse(markdown));
