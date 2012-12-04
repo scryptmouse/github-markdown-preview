@@ -5,9 +5,6 @@
 
     model: Doc,
 
-    initialize: function() {
-    },
-
     select2Query: function(query) {
       var data = {};
       data.results = this.map(function(doc) {
@@ -29,6 +26,7 @@
   });
 
   var Docs = window.Docs = new DocumentCollection();
+
   Docs.fetch();
 
 }).call(this);
