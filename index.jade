@@ -33,15 +33,15 @@ html(lang="en")
             a(href="http://github.github.com/github-flavored-markdown/", title="Introduction to GFM") very nice additions
             |  by Github
         pre
-          code.language-javascript
-            | (function() {
-            |   console.log('Syntax highlighting also available');
-            | }).call(this);
+          code.language-javascript.
+            (function() {
+              console.log('Syntax highlighting also available');
+            }).call(this);.
     footer
       aside
         | Stitched together by&nbsp;
         a(href="http://alexa.is", title="alexa.is") Alexa Grey
         |. Released under MIT license.
     script(src="/nowjs/now.js")
-    != js('application')
+    script(src="/javascripts/require.js", data-main="/javascripts/application")
 
