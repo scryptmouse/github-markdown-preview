@@ -4,33 +4,11 @@ define(
 [
   'jquery', 'underscore', 'backbone',
   'dispatcher', 'collections/Docs',
-  'hljs', 'select2',
+  'views/Parsed', 'hljs', 'select2',
   'lib/jquery.fn.setTime'
 ],
-function($, _, Backbone, Dispatcher, Docs, hljs) {
+function($, _, Backbone, Dispatcher, Docs, ParsedView, hljs) {
   'use strict';
-
-  // Private helper for use with showDocument,
-  // when iterating over div.highlight > pre tags.
-  function highlightCodeBlocks() {
-    /*jshint validthis:true*/
-    var $this = $(this)
-      , $pre  = $('pre', $this)
-      , lang, text, highlighted
-    ;
-
-    if ($pre.length === 0)
-      return;
-    else {
-      text = $pre.text();
-      if (!!(lang = $pre.attr('lang'))) {
-        highlighted = hljs.highlight(lang, text);
-      } else {
-        highlighted = hljs.highlightAuto(text);
-      }
-      $pre.html(highlighted.value);
-    }
-  }
 
   // When pressing 'tab' inside textarea,
   // insert a tab instead of switching fields.
@@ -70,6 +48,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       this.$sel = this.$('#documentSelector');
       this.$title = this.$('#documentTitle');
       this.$content = this.$('#text-input');
+      this.parsed = new ParsedView({el: $('#parsed')});
 
       this.configureSelect2();
 
@@ -138,7 +117,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       this.$title.val('');
       this.$content.val('');
 
-      this.$('#parsed').empty();
+      this.parsed.clear();
 
       this.updateTimes(null);
     },
@@ -192,10 +171,6 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       }
 
       this.sendMarkdown();
-    },
-
-    showParsed: function(parsed) {
-      this.$('#parsed').html(parsed).find('div.highlight').each(highlightCodeBlocks);
     },
 
     // Update time fields for currently-selected document.
