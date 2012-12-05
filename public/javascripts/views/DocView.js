@@ -9,6 +9,28 @@ define(
 function($, _, Backbone, Dispatcher, Docs, hljs) {
   'use strict';
 
+  // Private helper for use with showDocument,
+  // when iterating over div.highlight > pre tags.
+  function highlightCodeBlocks() {
+    /*jshint validthis:true*/
+    var $this = $(this)
+      , $pre  = $('pre', $this)
+      , lang, text, highlighted
+    ;
+
+    if ($pre.length === 0)
+      return;
+    else {
+      text = $pre.text();
+      if (!!(lang = $pre.attr('lang'))) {
+        highlighted = hljs.highlight(lang, text);
+      } else {
+        highlighted = hljs.highlightAuto(text);
+      }
+      $pre.html(highlighted.value);
+    }
+  }
+
   var DocView = Backbone.View.extend({
     events: {
       'keydown #text-input': 'tabHandler',
@@ -38,6 +60,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       hljs.initHighlightingOnLoad();
     },
 
+    // configure the select2 plugin
     configureSelect2: function() {
       var docs = this.docs;
 
@@ -56,9 +79,11 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
         data: {results: docs.models, text: function(doc) { return doc.get('title'); }},
         query: docs.select2Query.bind(docs)
       });
-
     },
 
+    // Get the currently-selected document from
+    // the select2 dropdown, or return false if
+    // none selected.
     getSelected: function() {
       var id;
 
@@ -85,81 +110,62 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       this.$sel.select2('val', '');
       this.$('#documentTitle').val('');
       this.$('#text-input').val('');
-      this.$('.dates').hide().find('time').setTime(null);
+      this.$('#parsed').empty();
+      this.updateTimes(null);
     },
 
     saveDocument: function(ev) {
-      var $sel = $('#documentSelector')
-        , id = $sel.val()
-        , title = this.$('#documentTitle').val()
+      var title = this.$('#documentTitle').val()
         , content = this.$('#text-input').val()
         , docValues = {content: content}
-        , doc = !_(id).isEmpty() ? this.docs.get(id) : false;
+        , doc = this.getSelected()
+      ;
 
       if (title !== '')
         docValues.title = title;
 
       if (doc) {
         doc.set(docValues).save();
-      } else if (content.match(/\S/) === null) {
+      } else if (content.match(/\S/) !== null) {
+        doc = this.docs.create(docValues);
+      } else {
         // If just whitespace, don't create a new doc
         return;
-      } else {
-        doc = this.docs.create(docValues);
       }
 
       if (doc) {
-        $sel.select2('data', doc.selector());
-        this.$('.dates').show().
-          find('time.created').setTime(doc.get('created')).
-          siblings('time.updated').setTime(doc.get('updated'));
+        // Set the selected document to match what is being displayed
+        this.$sel.select2('data', doc.selector());
+
+        this.updateTimes(doc);
       } else {
         alert('Failed to create new document!');
       }
 
-      Dispatcher.trigger('sendMarkdown');
+      this.sendMarkdown();
     },
 
+    // For onClick with the 'send' button.
     sendMarkdown: function(ev) {
       Dispatcher.trigger('sendMarkdown');
     },
 
     showDocument: function(ev) {
-      var $sel = $('#documentSelector')
-        , doc = this.docs.get($sel.val())
-      ;
+      var doc = this.getSelected();
 
       if (doc) {
         this.$('#text-input').val(doc.get('content'));
         this.$('#documentTitle').val(doc.get('title'));
-        this.$('.dates').show().
-          find('time.created').setTime(doc.get('created')).
-          siblings('time.updated').setTime(doc.get('updated'));
+        this.updateTimes(doc);
       } else {
         this.resetDocument();
       }
 
-      Dispatcher.trigger('sendMarkdown');
+      this.sendMarkdown();
     },
 
     showParsed: function(parsed) {
-      this.$('#parsed').html(parsed).find('div.highlight').each(function() {
-        var $this = $(this),
-            $pre  = $('pre', $this),
-            lang, text, highlighted;
-
-        if ($pre.length === 0)
-          return;
-        else {
-          text = $pre.text();
-          if (!!(lang = $pre.attr('lang'))) {
-            highlighted = hljs.highlight(lang, text);
-          } else {
-            highlighted = hljs.highlightAuto(text);
-          }
-          $pre.html(highlighted.value);
-        }
-      });
+      this.$('#parsed').html(parsed).find('div.highlight').each(highlightCodeBlocks);
     },
 
     tabHandler: function(ev) {
@@ -178,6 +184,17 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
         textArea.scrollTop      = scrollTop;
 
         ev.preventDefault();
+      }
+    },
+
+    // Update time fields for currently-selected document.
+    updateTimes: function(doc) {
+      if (doc) {
+        this.$('.dates').show();
+        this.$('time.created').setTime(doc.get('created'));
+        this.$('time.updated').setTime(doc.get('updated'));
+      } else {
+        this.$('.dates').hide().find('time').setTime(null);
       }
     }
   });
