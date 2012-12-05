@@ -1,6 +1,6 @@
 {
   "name": "live-ghmarkdown-previewer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Alexa Grey <devel@mouse.vc>",
   "private": true,
   "description": "backbone/nowjs-powered live markdown previewer.",
