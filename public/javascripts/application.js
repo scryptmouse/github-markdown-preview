@@ -1,48 +1,44 @@
-/*jshint jquery:true, browser:true */
-/*globals now,Docs,DocView,moment */
-//= require ./lib/jquery.min
-//= require ./lib/moment.min
-//= require ./lib/underscore
-//= require ./lib/backbone
-//= require ./lib/select2.min
-//= require ./lib/highlight.pack
-//= require ./dispatcher
-//= require ./models/Doc
-//= require ./collections/Docs
-//= require ./views/DocView
+/*jshint browser:true*/
+/*globals now */
+require({
+  paths: {
+    'jquery': 'lib/jquery.min',
+    'backbone': 'lib/backbone',
+    'underscore': 'lib/underscore',
+    'underscore.string': 'lib/underscore.string',
+    'moment': 'lib/moment.min',
+    'select2': 'lib/select2.min',
+    'hljs': 'lib/highlight.pack',
+    'backbone.localStorage': 'lib/backbone.localStorage-min',
 
-(function($) {
-  $.fn.setTime = function(d) {
-    var $this = $(this)
-      , m;
-
-    if ($this.is(':not(time)'))
-      return this;
-
-    if (d === null) {
-      $this.removeAttr('datetime').empty();
-    } else if (typeof d === 'number') {
-      try {
-        m = moment(d);
-        $this.attr('datetime', m.format()).text(m.fromNow());
-      } catch(e) {
-        console.log('problem parsing date', e);
-      }
+    'domReady': 'lib/domReady'
+  },
+  shim: {
+    'hljs': {
+      exports: 'hljs'
+    },
+    'backbone.localStorage': {
+      deps: ['backbone'],
+      exports: 'Backbone.LocalStorage'
+    },
+    'select2': {
+      deps: ['jquery'],
+      exports: 'jQuery.fn.select2'
     }
-
-    return this;
-  };
-}).call(this, window.jQuery);
-
-$(document).ready(function() {
+  }
+},
+['jquery', 'views/DocView', 'dispatcher', 'domReady!'],
+function($, DocView, Dispatcher) {
   'use strict';
+
+  var App = new DocView({el: $('#docView')});
+  now.getParsed = App.showParsed.bind(App);
 
   $('.dates').hide();
 
-  window.App = new DocView({el: $('#docView')});
-  now.getParsed = window.App.showParsed.bind(window.App);
+  window.App = App;
 
-  window.dispatch.on('sendMarkdown', function() {
+  Dispatcher.on('sendMarkdown', function() {
     now.sendMarkdown($('#text-input').val());
   });
 });
