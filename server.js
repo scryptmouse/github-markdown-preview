@@ -30,7 +30,7 @@ app.use(function(req, res) {
 
 server = require('http').createServer(app);
 
-server.listen(app.settings.port, '127.0.0.1', function(err) {
+server.listen(app.settings.port, function(err) {
   if (err) throw err;
 
   console.log('Server is now listening on http://127.0.0.1:%d', app.settings.port);
