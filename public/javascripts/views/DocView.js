@@ -65,7 +65,10 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       this.docs = new Docs();
       this.docs.fetch();
 
+      // cache important selectors
       this.$sel = this.$('#documentSelector');
+      this.$title = this.$('#documentTitle');
+      this.$content = this.$('#text-input');
 
       this.configureSelect2();
 
@@ -131,15 +134,17 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
         doc.destroy();
 
       this.$sel.select2('val', '');
-      this.$('#documentTitle').val('');
-      this.$('#text-input').val('');
+      this.$title.val('');
+      this.$content.val('');
+
       this.$('#parsed').empty();
+
       this.updateTimes(null);
     },
 
     saveDocument: function(ev) {
-      var title = this.$('#documentTitle').val()
-        , content = this.$('#text-input').val()
+      var title = this.$title.val()
+        , content = this.$content.val()
         , docValues = {content: content}
         , doc = this.getSelected()
       ;
@@ -150,19 +155,20 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       if (doc) {
         doc.set(docValues).save();
       } else if (content.match(/\S/) !== null) {
+        // If content not just whitespace, create a new document.
         doc = this.docs.create(docValues);
       } else {
-        // If just whitespace, don't create a new doc
+        // If content is just whitespace, return now.
         return;
       }
 
+      // If a document was updated/created
       if (doc) {
-        // Set the selected document to match what is being displayed
+        // Set the selected option to match what is being displayed
         this.$sel.select2('data', doc.selector());
-
+        // Update title
+        this.$title.val(doc.get('title'));
         this.updateTimes(doc);
-      } else {
-        alert('Failed to create new document!');
       }
 
       this.sendMarkdown();
@@ -177,8 +183,8 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       var doc = this.getSelected();
 
       if (doc) {
-        this.$('#text-input').val(doc.get('content'));
-        this.$('#documentTitle').val(doc.get('title'));
+        this.$content.val(doc.get('content'));
+        this.$title.val(doc.get('title'));
         this.updateTimes(doc);
       } else {
         this.resetDocument();
@@ -189,25 +195,6 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
 
     showParsed: function(parsed) {
       this.$('#parsed').html(parsed).find('div.highlight').each(highlightCodeBlocks);
-    },
-
-    tabHandler: function(ev) {
-      var textArea = ev.currentTarget;
-
-      if (ev.keyCode == 9) {
-        var tab       = "\t",
-            startPos  = textArea.selectionStart,
-            endPos    = textArea.selectionEnd,
-            scrollTop = textArea.scrollTop;
-
-        textArea.value = textArea.value.substring(0, startPos) + tab + textArea.value.substring(endPos, textArea.value.length);
-        textArea.focus();
-        textArea.selectionStart = startPos + tab.length;
-        textArea.selectionEnd   = startPos + tab.length;
-        textArea.scrollTop      = scrollTop;
-
-        ev.preventDefault();
-      }
     },
 
     // Update time fields for currently-selected document.
