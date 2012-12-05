@@ -1,4 +1,5 @@
-(function() {
+define(['underscore', 'backbone', 'moment'], function(_, Backbone, moment) {
+  'use strict';
 
   var Doc = Backbone.Model.extend({
     defaults: function() {
@@ -26,6 +27,5 @@
     }
   });
 
-  window.Doc = Doc;
-
-}).call(this);
+  return Doc;
+});
