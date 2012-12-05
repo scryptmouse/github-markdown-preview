@@ -31,9 +31,28 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
     }
   }
 
+  // When pressing 'tab' inside textarea,
+  // insert a tab instead of switching fields.
+  function handleTabs(ev) {
+    var textArea = ev.currentTarget
+      , tab       = "\t"
+      , startPos  = textArea.selectionStart
+      , endPos    = textArea.selectionEnd
+      , scrollTop = textArea.scrollTop
+    ;
+
+    textArea.value = textArea.value.substring(0, startPos) + tab + textArea.value.substring(endPos, textArea.value.length);
+    textArea.focus();
+    textArea.selectionStart = startPos + tab.length;
+    textArea.selectionEnd   = startPos + tab.length;
+    textArea.scrollTop      = scrollTop;
+
+    ev.preventDefault();
+  }
+
   var DocView = Backbone.View.extend({
     events: {
-      'keydown #text-input': 'tabHandler',
+      'keydown #text-input': 'inputChanged',
       'click #getPreview': 'sendMarkdown',
       'click #save': 'saveDocument',
       'click #destroy': 'destroyDocument',
@@ -50,10 +69,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
 
       this.configureSelect2();
 
-      this.$el.on('keyup', '#text-input', _(this.saveDocument).debounce(1000));
-
-      this.dispatcher = Dispatcher;
-
+      this.on('document:save', _(this.saveDocument).debounce(1000));
       this.on('document:reset', this.resetDocument);
       this.docs.on('remove', this.resetDocument);
 
@@ -93,6 +109,13 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
       id = this.$sel.val();
 
       return _.isEmpty(id) ? false : this.docs.get(id);
+    },
+
+    inputChanged: function(ev) {
+      if (ev.keyCode == 9)
+        handleTabs(ev);
+
+      this.trigger('document:save');
     },
 
     destroyDocument: function(ev) {
