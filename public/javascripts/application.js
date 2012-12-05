@@ -33,7 +33,9 @@ function($, DocView) {
 
   var App = new DocView({el: $('#docView')});
 
-  now.getParsed = App.showParsed;
+
+  // set up renderParsed
+  now.renderParsed = App.parsed.render;
 
   window.App = App;
 });

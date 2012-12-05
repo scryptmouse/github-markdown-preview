@@ -47,5 +47,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 everyone.now.sendMarkdown = function(markdown) {
-  this.now.getParsed(parser.parse(markdown));
+  this.now.renderParsed(parser.parse(markdown));
 };
