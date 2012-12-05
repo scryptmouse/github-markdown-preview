@@ -1,7 +1,5 @@
-(function() {
+define(['underscore', 'backbone'], function(_, Backbone) {
+  var Dispatcher = _.clone(Backbone.Events);
 
-  var dispatch = _.clone(Backbone.Events);
-
-  window.dispatch = dispatch;
-
-}).call(this);
+  return Dispatcher;
+});
