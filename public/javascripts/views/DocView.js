@@ -60,7 +60,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
     },
 
     initialize: function() {
-      _(this).bindAll('resetDocument', 'showDocument', 'showParsed', 'saveDocument');
+      _.bindAll(this);
 
       this.docs = new Docs();
       this.docs.fetch();
