@@ -1,4 +1,5 @@
-/*jshint devel:true*/
+/*jshint devel:true */
+/*globals now*/
 define(
 [
   'jquery', 'underscore', 'backbone',
@@ -72,6 +73,9 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
 
       this.configureSelect2();
 
+      // Hide dates initially.
+      this.$('.dates').hide();
+
       this.on('document:save', _(this.saveDocument).debounce(1000));
       this.on('document:reset', this.resetDocument);
       this.docs.on('remove', this.resetDocument);
@@ -105,9 +109,6 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
     // none selected.
     getSelected: function() {
       var id;
-
-      if (!this.$sel)
-        this.$sel = this.$('#documentSelector');
 
       id = this.$sel.val();
 
@@ -176,7 +177,7 @@ function($, _, Backbone, Dispatcher, Docs, hljs) {
 
     // For onClick with the 'send' button.
     sendMarkdown: function(ev) {
-      Dispatcher.trigger('sendMarkdown');
+      now.sendMarkdown(this.$content.val());
     },
 
     showDocument: function(ev) {

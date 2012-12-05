@@ -27,18 +27,13 @@ require({
     }
   }
 },
-['jquery', 'views/DocView', 'dispatcher', 'domReady!'],
-function($, DocView, Dispatcher) {
+['jquery', 'views/DocView', 'domReady!'],
+function($, DocView) {
   'use strict';
 
   var App = new DocView({el: $('#docView')});
-  now.getParsed = App.showParsed.bind(App);
 
-  $('.dates').hide();
+  now.getParsed = App.showParsed;
 
   window.App = App;
-
-  Dispatcher.on('sendMarkdown', function() {
-    now.sendMarkdown($('#text-input').val());
-  });
 });
