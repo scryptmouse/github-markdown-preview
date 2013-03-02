@@ -4,6 +4,9 @@
   "author": "Alexa Grey <devel@mouse.vc>",
   "private": true,
   "description": "backbone/nowjs-powered live markdown previewer.",
+  "scripts": {
+    "start": "node gfm-preview.js"
+  },
   "dependencies": {
     "connect": "2.4.2",
     "connect-assets": "2.3.1",
